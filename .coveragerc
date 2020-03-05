@@ -2,7 +2,7 @@
 [run]
 branch = True
 source = cicd_sim
-# omit = bad_file.py
+omit = src/cicd_sim/__init__.py
 
 [paths]
 source =
