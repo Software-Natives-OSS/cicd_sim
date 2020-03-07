@@ -22,7 +22,9 @@ Choose one of these:
 
 ### Binder
 
-Just click here: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim.git/master)
+By far the easiest way to run the simulator is by clicking the Binder batch. This starts Binder which may take up to ~5 mins.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim/master?filepath=notebooks%2Fexample1.ipynb)
 
 ### Docker
 
