@@ -22,17 +22,19 @@ Choose one of these:
 
 ### Binder
 
-Just click here: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim.git/master)
+By far the easiest way to run the simulator is by clicking the Binder batch. This starts Binder which may take up to ~5 mins.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim/master?filepath=notebooks%2Fexample1.ipynb)
 
 ### Docker
 
 Quick start guide to run this project on your Desktop system. In the current directory, execute:
 
 ```sh
-docker build -t cicd-sim .
+docker build -f docker/Dockerfile -t cicd-sim .
 docker run --rm \
     -p 8888:8888 \
-    -v "$(pwd)/src:/home/jovyan"\
+    -v "$(pwd)/notebooks:/home/jovyan"\
     cicd-sim
 
 ```
@@ -41,9 +43,12 @@ Check the output click the link and start playing!
 
 ### Python
 
+Install required libraries, install this `cdcd_sim` module and finally run Jupyter on the example notebook
+
 ```sh
 pip3 install -r requirements.txt
-jupyter notebook src
+python3 setup.py install
+jupyter notebook notebooks
 
 ```
 
