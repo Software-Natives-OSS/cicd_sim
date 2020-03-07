@@ -41,9 +41,12 @@ Check the output click the link and start playing!
 
 ### Python
 
+Install required libraries, install this `cdcd_sim` module and finally run Jupyter on the example notebook
+
 ```sh
 pip3 install -r requirements.txt
-jupyter notebook src
+python3 setup.py install
+jupyter notebook notebooks
 
 ```
 
