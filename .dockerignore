@@ -1,0 +1,16 @@
+dist
+build
+notebooks
+docs
+docker
+
+**/__pycache__/*
+**/.pytest_cache/
+.jupyter
+.ipython
+.coveragerc
+**/.coverage
+.dockerignore
+.vscode
+**/.local
+cov.xml

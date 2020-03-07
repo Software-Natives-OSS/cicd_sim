@@ -29,10 +29,10 @@ Just click here: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybind
 Quick start guide to run this project on your Desktop system. In the current directory, execute:
 
 ```sh
-docker build -t cicd-sim .
+docker build -f docker/Dockerfile -t cicd-sim .
 docker run --rm \
     -p 8888:8888 \
-    -v "$(pwd)/src:/home/jovyan"\
+    -v "$(pwd)/notebooks:/home/jovyan"\
     cicd-sim
 
 ```
