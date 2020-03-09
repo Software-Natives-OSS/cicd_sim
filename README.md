@@ -1,3 +1,5 @@
+![](https://github.com/Software-Natives-OSS/cicd_sim/workflows/Python%20package/badge.svg)
+
 # CI/CD Simulator
 
 In continuous integration (CI), versioning plays an important role. This project was created to make versioning of Conan artifacts tangible. Implemented in Python 3
