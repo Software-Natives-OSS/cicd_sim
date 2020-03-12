@@ -1,5 +1,5 @@
 ![](https://github.com/Software-Natives-OSS/cicd_sim/workflows/Python%20package/badge.svg)
-![](https://codecov.io/gh/conan-io/conan/branch/develop/graph/badge.svg)
+![](https://codecov.io/gh/Software-Natives-OSS/cicd_sim/graph/badge.svg)
 
 # CI/CD Simulator
 
