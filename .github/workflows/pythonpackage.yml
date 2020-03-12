@@ -41,4 +41,5 @@ jobs:
         python setup.py test
     - uses: codecov/codecov-action@v1
       with:
+        file: ./cov.xml
         fail_ci_if_error: true # optional (default = false)
