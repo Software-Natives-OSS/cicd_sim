@@ -2,11 +2,20 @@
 
 # CI/CD Simulator
 
-In continuous integration (CI), versioning plays an important role. This project was created to make versioning of Conan artifacts tangible. Implemented in Python 3
+In continuous integration (CI), versioning plays an important role. This project was created to make versioning of Conan artifacts tangible. It does so by letting the user create a virtual infrastructure of
+
+- Git repositories (e.g. GitHub)
+- Buildmaschine (e.g. Jenkins)
+- Artifact store (e.g. Artifactory)
+- Conan
+
+Within this environment, the user can safely and effortlessly test what happens if versions are use the one or the other way.
+
+This project is implemented in Python 3.
 
 ## Introduction
 
-Conan package versioning follows [semver.org](https://semver.org). While semver specifies all aspects of versioning it also provides lots of flexibility. That makes it not fully obvious how to effectively apply versions to your Conan packages:
+Conan package versioning follows [semver.org](https://semver.org). While semver specifies all aspects of versioning it also provides lots of flexibility how excatly to put it into praxis. That makes it not fully obvious how to effectively apply versions to your Conan packages:
 
 - Should I use pre-release tags and how
 - Should I use build numbers and how
