@@ -65,8 +65,31 @@ class Branch:
     def get_version(self):
         return self.get_file_content('VERSION')
 
+    def set_version(self, version):
+        """Set the project version
+
+        :version: A string denoting a semver.org version. E.g. '1.2.3-pre.0+20200313'
+        
+        Technically, this function commits a file named 'VERSION' as this CICD
+        simulator expects an according file to determine the project version.
+        """
+        return self.commit_file('VERSION', version)
+
     def get_requires(self):
         return self.get_file_content('REQUIRES')
+
+    def set_requires(self, requires):
+        """Set the project requires (AKA dependencies)
+
+        :requires: A string composed of the required package and the required 
+        semver version or version range delimited by a slash ('/'). 
+        E.g. 'lib/1.2.4', 'libA/1.x' or even 'lib/>1.0.0.0-0 <2.0.0'
+        
+        Technically, this function commits a file named 'REQUIRES' as this CICD
+        simulator expects an according file to determine the projects 
+        requirements.
+        """
+        return self.commit_file('REQUIRES', requires)
 
     def get_file_content(self, file_name):
         return self._files.get_file_content(file_name)
