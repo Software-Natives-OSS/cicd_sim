@@ -12,7 +12,7 @@ class TestJenkins(unittest.TestCase):
 
     def setUp(self):
         self._repos = Repos()
-        self._repo = self._repos.create_repo('theRepo', {})
+        self._repo = self._repos.create_repo('theRepo')
         self._build_id_generator = BuildIdGenerator()
 
     def _create_jenkins(self, artifactory = Artifactory()):
@@ -80,11 +80,11 @@ class TestJenkins(unittest.TestCase):
         artifactory = Artifactory()
         jenkins = self._create_jenkins(artifactory)
 
-        lib_repo = self._repos.create_repo('lib', jenkins)
+        lib_repo = self._repos.create_repo('lib')
         lib = lib_repo.checkout('develop').set_version('1.0.1')
         lib.push()
 
-        app_repo = self._repos.create_repo('app', jenkins)
+        app_repo = self._repos.create_repo('app')
         app = app_repo.checkout('develop').set_version('1.0.1').set_requires('lib/1.x')
         app.push()
 
@@ -96,10 +96,10 @@ class TestJenkins(unittest.TestCase):
     def test_push_app__before_lib_available__conan_install_should_fail(self):
         jenkins = self._create_jenkins()
 
-        lib_repo = self._repos.create_repo('lib', jenkins)
+        lib_repo = self._repos.create_repo('lib')
         lib_repo.checkout('master').set_version('1.0.1')
 
-        app_repo = self._repos.create_repo('app', jenkins)
+        app_repo = self._repos.create_repo('app')
         app = app_repo.checkout('master').set_version('1.0.1').set_requires('lib/1.x')
         # conan install should fail with exception
         self.assertRaises(Exception, lambda: app.push())

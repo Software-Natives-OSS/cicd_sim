@@ -26,12 +26,12 @@ class TestGitRepo(unittest.TestCase):
         self.assertIsInstance(sha, str)
 
     def test_push_a_branch(self):
-        buildmachine = MagicMock()
-        buildmachine.build = MagicMock()
+        repos = MagicMock()
+        repos.trigger_buildmachine = MagicMock()
         branch = 'The Branch'
-        repo = self._createRepo('a name', buildmachine)
+        repo = self._createRepo('a name', repos)
         repo.push(branch)
-        buildmachine.build.assert_called_with('The Branch')
+        repos.trigger_buildmachine.assert_called_with('The Branch')
 
     def test_create_branch(self):
         repo = self._createRepo()

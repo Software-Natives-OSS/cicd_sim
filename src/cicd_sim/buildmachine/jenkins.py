@@ -13,6 +13,10 @@ class Jenkins:
         self._output = output
         self._build_id_generator = build_id_generator
         self._remember_built_branches = {}
+        self._register_build_hooks()
+    
+    def _register_build_hooks(self):
+        self._repos.set_buildmachine(self)
        
     def build(self, branch):
         """Build a Git branch.
