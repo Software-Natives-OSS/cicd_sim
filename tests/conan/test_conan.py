@@ -13,10 +13,10 @@ class TestConan(unittest.TestCase):
         self._repos = Repos()
 
     def _create_test_library(self):
-        return self._repos.create_repo('lib', {}).checkout('master').commit_file('REQUIRES', '')
+        return self._repos.create_repo('lib', {}).checkout('master').set_requires('')
 
     def _create_test_app(self):
-        return self._repos.create_repo('app', {}).checkout('master').commit_file('VERSION', '6.0.0')
+        return self._repos.create_repo('app', {}).checkout('master').set_version('6.0.0')
 
     def _create_conan(self, output = NullOutput()):
         return Conan(output)
@@ -38,7 +38,7 @@ class TestConan(unittest.TestCase):
             'lib': ['1.2.3']
         }
         app_branch = self._create_test_app()
-        app_branch.commit_file('REQUIRES', 'lib/1.x')
+        app_branch.set_requires('lib/1.x')
         resolved_packages, requires = self._create_conan().resolve_requires(artifacts, app_branch)
         self.assertEqual('lib/1.2.3', resolved_packages)
         self.assertEqual(('lib', '1.x'), requires)
@@ -48,7 +48,7 @@ class TestConan(unittest.TestCase):
             'lib': ['2.2.3']
         }
         app_branch = self._create_test_app()
-        app_branch.commit_file('REQUIRES', 'lib/1.x')
+        app_branch.set_requires('lib/1.x')
         resolved_packages, requires = self._create_conan().resolve_requires(artifacts, app_branch)
         self.assertIsNone(resolved_packages)
         self.assertEqual(('lib', '1.x'), requires)
@@ -56,13 +56,13 @@ class TestConan(unittest.TestCase):
     def test_check_requires_requires_syntax_error(self):
         lib = self._repos.create_repo('lib', {})
         branch = lib.checkout('master')
-        branch.commit_file('REQUIRES', 'invalid | format')
+        branch.set_requires('invalid | format')
         conan = self._create_conan()
         self.assertRaises(Exception, lambda: conan._determine_requires(branch))
 
     def test_conan_install(self):
         app_branch = self._create_test_app()
-        app_branch.commit_file('REQUIRES', 'lib/2.x')
+        app_branch.set_requires('lib/2.x')
         artifacts = {
             'lib': ['2.0.3']
         }
@@ -124,7 +124,7 @@ conan_install_test_values = [
 
 @pytest.mark.parametrize("require_version, versions, expected_version", conan_install_test_values)
 def test_conan_install_parametrized(require_version, versions, expected_version):
-    app_branch = Repos().create_repo('lib', {}).checkout('master').commit_file('REQUIRES', require_version)
+    app_branch = Repos().create_repo('lib', {}).checkout('master').set_requires(require_version)
     artifacts = {
         'lib': versions
     }

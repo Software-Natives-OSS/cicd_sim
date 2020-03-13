@@ -25,8 +25,8 @@ class TestJenkins(unittest.TestCase):
 
     def _get_or_create_branch(self, branch_name, version, requires = ''):
         branch = self._repo.checkout(branch_name)
-        branch.commit_file('VERSION', version)
-        return branch.commit_file('REQUIRES', requires)
+        branch.set_version(version)
+        return branch.set_requires(requires)
 
     def test_build_develop(self):
         self._build_id_generator.generate_id = MagicMock(return_value = "theBuildId")
@@ -81,11 +81,11 @@ class TestJenkins(unittest.TestCase):
         jenkins = self._create_jenkins(artifactory)
 
         lib_repo = self._repos.create_repo('lib', jenkins)
-        lib = lib_repo.checkout('develop').commit_file('VERSION', '1.0.1')
+        lib = lib_repo.checkout('develop').set_version('1.0.1')
         lib.push()
 
         app_repo = self._repos.create_repo('app', jenkins)
-        app = app_repo.checkout('develop').commit_file('VERSION', '1.0.1').commit_file('REQUIRES', 'lib/1.x')
+        app = app_repo.checkout('develop').set_version('1.0.1').set_requires('lib/1.x')
         app.push()
 
         # Expect a rebuild of 'app' because a new artifact for 'lib' will be created
@@ -97,9 +97,9 @@ class TestJenkins(unittest.TestCase):
         jenkins = self._create_jenkins()
 
         lib_repo = self._repos.create_repo('lib', jenkins)
-        lib_repo.checkout('master').commit_file('VERSION', '1.0.1')
+        lib_repo.checkout('master').set_version('1.0.1')
 
         app_repo = self._repos.create_repo('app', jenkins)
-        app = app_repo.checkout('master').commit_file('VERSION', '1.0.1').commit_file('REQUIRES', 'lib/1.x')
+        app = app_repo.checkout('master').set_version('1.0.1').set_requires('lib/1.x')
         # conan install should fail with exception
         self.assertRaises(Exception, lambda: app.push())
