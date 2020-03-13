@@ -6,11 +6,11 @@ from . sha import SHA
 class Repo:
     """A "Repo" is a single Git repo
     """
-    def __init__(self, name, buildmachine):
+    def __init__(self, name, repos):
         self._branches = []
         self._sha = SHA()
         self._name = name
-        self._buildmachine = buildmachine
+        self._repos = repos
         self._create_default_branch()
 
     def __repr__(self):
@@ -20,7 +20,7 @@ class Repo:
         return self._sha.generate_next()
 
     def push(self, branch):
-        self._buildmachine.build(branch)
+        self._repos.trigger_buildmachine(branch)
 
     def get_name(self):
         return self._name

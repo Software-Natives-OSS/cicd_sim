@@ -13,7 +13,8 @@ class TestGitBranch(unittest.TestCase):
 
     def _create_repo(self, buildmachine):
         repos = Repos()
-        return repos.create_repo(self._project_name, buildmachine)
+        repos.set_buildmachine(buildmachine)
+        return repos.create_repo(self._project_name)
 
     def test_default_branch(self):
         branch = Branch('develop', self._repo)

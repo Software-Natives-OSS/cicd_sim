@@ -6,8 +6,8 @@ artifactory = Artifactory()
 jenkins = Jenkins(artifactory, github)
 
 # Create Git repos/projects
-lib = github.create_repo('lib', jenkins)
-app = github.create_repo('app', jenkins)
+lib = github.create_repo('lib')
+app = github.create_repo('app')
 
 # Start developing
 lib_dev = lib.create_branch('develop', 'blue')

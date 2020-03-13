@@ -7,14 +7,21 @@ class Repos:
     """
     def __init__(self):
         self._repos = []
+        self._buildmachine = None
 
-    def create_repo(self, project_name, buildmachine):
+    def set_buildmachine(self, buildmachine):
+        self._buildmachine = buildmachine
+
+    def create_repo(self, project_name):
         repo = self._find_repo(project_name)
         if repo is None:
-            repo = Repo(project_name, buildmachine)
+            repo = Repo(project_name, self)
             self._repos.append(repo)
         return repo
     
+    def trigger_buildmachine(self, branch):
+        self._buildmachine.build(branch)
+
     def get_repos(self):
         return self._repos
 
