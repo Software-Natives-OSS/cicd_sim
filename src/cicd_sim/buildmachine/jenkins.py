@@ -1,7 +1,12 @@
+from .. util.stdoutput import StdOutput
+from .. util.build_id_generator import BuildIdGenerator
+from .. conan import Conan
+
+
 class Jenkins:
     """ A Jenkins simulation. It supports 'building a branch' which results in an artifact that gets published to an 'artifactory'
     """
-    def __init__(self, artifactory, conan, repos, output, build_id_generator):
+    def __init__(self, artifactory, repos, conan=Conan(), output=StdOutput(), build_id_generator=BuildIdGenerator()):
         self._artifactory = artifactory
         self._conan = conan
         self._repos = repos

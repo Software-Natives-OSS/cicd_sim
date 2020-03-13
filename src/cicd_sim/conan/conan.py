@@ -1,12 +1,12 @@
 from semver import max_satisfying
-
+from .. util import StdOutput
 
 class Conan:
     """Simple implementation of Conan.io
 
     It tries to resemble the functionality of Conan regarding `semver` handling.
     """
-    def __init__(self, output):
+    def __init__(self, output=StdOutput()):
         self._output = output
         
     def install(self, branch, artifacts):

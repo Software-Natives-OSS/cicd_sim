@@ -5,9 +5,8 @@ from unittest.mock import MagicMock
 
 from cicd_sim import Jenkins
 from cicd_sim import Artifactory
-from cicd_sim import Conan
 from cicd_sim import Repos
-from cicd_sim import BuildIdGenerator, NullOutput
+from cicd_sim import BuildIdGenerator
 
 class TestJenkins(unittest.TestCase):
 
@@ -16,13 +15,8 @@ class TestJenkins(unittest.TestCase):
         self._repo = self._repos.create_repo('theRepo', {})
         self._build_id_generator = BuildIdGenerator()
 
-    def _create_jenkins(self, artifactory = None):
-        # create default artifactory if none is provided
-        if artifactory is None:
-            artifactory = Artifactory()
-        output = NullOutput()
-        conan = Conan(output)
-        return Jenkins(artifactory, conan, self._repos, output, self._build_id_generator)
+    def _create_jenkins(self, artifactory = Artifactory()):
+        return Jenkins(artifactory, self._repos, build_id_generator=self._build_id_generator)
 
     def _create_jenkins_artifactory_mock(self):
         self._mock_artifactory = Artifactory()
