@@ -67,7 +67,8 @@ class TestGitBranch(unittest.TestCase):
     def test_chaining(self):
         buildmachine = MagicMock()
         repo = self._create_repo(buildmachine)
-        branch = repo.checkout('master').set_version('1.2.3')
+        branch = repo.checkout('master')
+        branch.set_version('1.2.3')
         self.assertEqual(repo.checkout('master'), branch)
 
     def test_create_branch__new_color(self):

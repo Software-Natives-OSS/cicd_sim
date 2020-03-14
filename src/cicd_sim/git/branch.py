@@ -73,7 +73,7 @@ class Branch:
         Technically, this function commits a file named 'VERSION' as this CICD
         simulator expects an according file to determine the project version.
         """
-        return self.commit_file('VERSION', version)
+        self.commit_file('VERSION', version)
 
     def get_requires(self):
         return self.get_file_content('REQUIRES')
@@ -89,7 +89,7 @@ class Branch:
         simulator expects an according file to determine the projects 
         requirements.
         """
-        return self.commit_file('REQUIRES', requires)
+        self.commit_file('REQUIRES', requires)
 
     def get_file_content(self, file_name):
         return self._files.get_file_content(file_name)
