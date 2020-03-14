@@ -35,12 +35,12 @@ class TestGitRepo(unittest.TestCase):
 
     def test_create_branch(self):
         repo = self._createRepo()
-        develop = repo.create_branch("develop")
+        develop = repo.checkout("develop")
         self.assertIn(develop, repo.get_branches())
         
     def test_delete_branch(self):
         repo = self._createRepo()
-        develop = repo.create_branch('develop')
+        develop = repo.checkout('develop')
         repo.delete_branch(develop)
         self.assertNotIn(develop, repo.get_branches())
 
@@ -48,8 +48,8 @@ class TestGitRepo(unittest.TestCase):
         repo = self._createRepo()
         master = repo.checkout('master')
         self.assertIsNotNone(master, "A default branch must be there")
-        develop = repo.create_branch('develop')
-        feature_a = repo.create_branch('feature/a')
+        develop = repo.checkout('develop')
+        feature_a = repo.checkout('feature/a')
         self.assertIn(master, repo.get_branches())
         self.assertIn(develop, repo.get_branches())
         self.assertIn(feature_a, repo.get_branches())

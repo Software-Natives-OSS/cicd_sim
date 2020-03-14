@@ -25,8 +25,8 @@ class Branch:
         self._commit()
         return self
         
-    def create_branch(self, name, colour = 'black'):
-        new_branch = self._repo.create_branch(name, colour)
+    def checkout(self, name, colour = 'black'):
+        new_branch = self._repo.checkout(name, colour)
         new_branch.set_files(copy.deepcopy(self._files))
         return new_branch
 
