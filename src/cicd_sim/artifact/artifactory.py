@@ -15,7 +15,8 @@ class Artifactory:
         """
         if project_name not in self._artifacts:
             self._artifacts[project_name] = []
-        self._artifacts[project_name].append(artifact_identifier)
+        if artifact_identifier not in self._artifacts[project_name]:
+            self._artifacts[project_name].append(artifact_identifier)
         
     def get_artifacts(self):
         """
