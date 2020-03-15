@@ -33,12 +33,13 @@ class Jenkins:
         """
         self._output.building(branch)
         resolved_requires = self._conan.install(branch, self._artifactory.get_artifacts())
-        version = branch.get_version()
-        suffix = self._get_version_suffix(branch)
-        artifact_version = "{}{}".format(version, suffix)
-        self._publish_artifact(branch, artifact_version)
-        self._remember_built_artifact(branch, resolved_requires)
-        self.check_repos_require_build()
+        if self._shall_publish_artifact(branch):
+            version = branch.get_version()
+            suffix = self._get_version_suffix(branch)
+            artifact_version = "{}{}".format(version, suffix)
+            self._publish_artifact(branch, artifact_version)
+            self._remember_built_artifact(branch, resolved_requires)
+            self.check_repos_require_build()
     
     def check_repos_require_build(self):
         """Check if projects needs to be rebuild becuase their 'requires' have 
@@ -49,6 +50,21 @@ class Jenkins:
                 resolved_requires, _ = self._conan.resolve_requires(self._artifactory.get_artifacts(), branch)
                 if resolved_requires and self._is_artifact_rebuild_required(branch, resolved_requires):
                     self.build(branch)
+
+    def _shall_publish_artifact(self, branch):
+        branch_name = branch.get_name()
+        if branch_name == 'master':
+            return True
+        if branch_name == 'develop':
+            return True
+        if branch_name.startswith('release/'):
+            return True
+        if branch_name.startswith('support/'):
+            return True
+        if branch_name.startswith('hotfix/'):
+            return True
+        # e.g. 'feature/xyz'
+        return False
 
     def _remember_built_artifact(self, branch, resolved_requires):
         project_desc = branch.get_description(True)

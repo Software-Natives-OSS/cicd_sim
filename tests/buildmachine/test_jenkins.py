@@ -53,13 +53,13 @@ class TestJenkins(unittest.TestCase):
         jenkins.build(branch)
         self._mock_artifactory.publish.assert_called_with('theRepo', '1.2.3')
 
-    def test_build_feature_a(self):
+    def test_build_feature_a__assume_not_published(self):
         self._build_id_generator.generate_id = MagicMock(return_value = "theBuildId")
         branch = self._get_or_create_branch('feature/a', '1.2.3')
         branch.get_commit_sha = MagicMock(return_value = "0000000")
         jenkins = self._create_jenkins_artifactory_mock()
         jenkins.build(branch)
-        self._mock_artifactory.publish.assert_called_with('theRepo', '1.2.3-theBuildId+0000000')
+        self._mock_artifactory.publish.assert_not_called()
 
     def test_build_hotfix_1_2_4(self):
         self._build_id_generator.generate_id = MagicMock(return_value = "theBuildId")
