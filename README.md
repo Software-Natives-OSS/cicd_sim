@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![](https://github.com/Software-Natives-OSS/cicd_sim/workflows/Python%20package/badge.svg)
 ![](https://codecov.io/gh/Software-Natives-OSS/cicd_sim/graph/badge.svg)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim/master?filepath=notebooks%2Fexample1.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim/master?filepath=notebooks)
 
 # CI/CD Simulator
 
@@ -38,7 +38,7 @@ Choose one of these:
 
 By far the easiest way to run the simulator is by clicking the Binder batch. This starts Binder which may take up to ~5 mins.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim/master?filepath=notebooks%2Fexample1.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Software-Natives-OSS/cicd_sim/master?filepath=notebooks)
 
 ### Docker
 
