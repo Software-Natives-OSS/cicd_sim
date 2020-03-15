@@ -30,7 +30,7 @@ class TestGitBranch(unittest.TestCase):
         master = self._repo.checkout('master')
         master.commit_file('FileA', 'aaa')
         master.commit_file('FileB', 'bbb')
-        develop = master.create_branch('develop')
+        develop = master.checkout('develop')
         self.assertEqual('aaa', develop.get_file_content('FileA'))
         self.assertEqual('bbb', develop.get_file_content('FileB'))
 
@@ -38,7 +38,7 @@ class TestGitBranch(unittest.TestCase):
         master = self._repo.checkout('master')
         master.commit_file('FileA', 'aaa')
         master.commit_file('FileB', 'bbb')
-        develop = master.create_branch('develop')
+        develop = master.checkout('develop')
         develop.commit_file('FileA', 'aaa222')
         develop.commit_file('FileDevelop', 'develop')
         master.merge(develop)
@@ -67,21 +67,27 @@ class TestGitBranch(unittest.TestCase):
     def test_chaining(self):
         buildmachine = MagicMock()
         repo = self._create_repo(buildmachine)
-        branch = repo.checkout('master').set_version('1.2.3')
+        branch = repo.checkout('master')
+        branch.set_version('1.2.3')
         self.assertEqual(repo.checkout('master'), branch)
 
     def test_create_branch__new_color(self):
-        branch1 = self._repo.create_branch('branch1', 'colour1')
+        branch1 = self._repo.checkout('branch1', 'colour1')
         self.assertEqual('colour1', branch1.get_colour())
-        branch2 = branch1.create_branch('branch2', 'colour2')
+        branch2 = branch1.checkout('branch2', 'colour2')
         self.assertEqual('colour2', branch2.get_colour())
         
     def test_create_branch__already_exists__checkout_instead(self):
-        branch1 = self._repo.create_branch('branch1')
-        branch2 = self._repo.create_branch('branch1')
+        branch1 = self._repo.checkout('branch1')
+        branch2 = self._repo.checkout('branch1')
         self.assertEqual(branch1, branch2)
         
     def test_branch_description__expect_branch_name(self):
-        branch2 = self._repo.create_branch('branch1')
+        branch2 = self._repo.checkout('branch1')
         self.assertTrue(branch2.get_description().find('branch1') >= 1)
-        
+    
+    def test_branch_checkout_change_colour(self):
+        branch = self._repo.checkout('branch', 'colour1')
+        self.assertEqual('colour1', branch.get_colour())
+        branch = self._repo.checkout('branch', 'colour2')
+        self.assertEqual('colour2', branch.get_colour())

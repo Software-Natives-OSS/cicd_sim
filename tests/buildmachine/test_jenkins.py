@@ -26,7 +26,8 @@ class TestJenkins(unittest.TestCase):
     def _get_or_create_branch(self, branch_name, version, requires = ''):
         branch = self._repo.checkout(branch_name)
         branch.set_version(version)
-        return branch.set_requires(requires)
+        branch.set_requires(requires)
+        return branch
 
     def test_build_develop(self):
         self._build_id_generator.generate_id = MagicMock(return_value = "theBuildId")
@@ -52,13 +53,13 @@ class TestJenkins(unittest.TestCase):
         jenkins.build(branch)
         self._mock_artifactory.publish.assert_called_with('theRepo', '1.2.3')
 
-    def test_build_feature_a(self):
+    def test_build_feature_a__assume_not_published(self):
         self._build_id_generator.generate_id = MagicMock(return_value = "theBuildId")
         branch = self._get_or_create_branch('feature/a', '1.2.3')
         branch.get_commit_sha = MagicMock(return_value = "0000000")
         jenkins = self._create_jenkins_artifactory_mock()
         jenkins.build(branch)
-        self._mock_artifactory.publish.assert_called_with('theRepo', '1.2.3-theBuildId+0000000')
+        self._mock_artifactory.publish.assert_not_called()
 
     def test_build_hotfix_1_2_4(self):
         self._build_id_generator.generate_id = MagicMock(return_value = "theBuildId")
@@ -81,16 +82,19 @@ class TestJenkins(unittest.TestCase):
         jenkins = self._create_jenkins(artifactory)
 
         lib_repo = self._repos.create_repo('lib')
-        lib = lib_repo.checkout('develop').set_version('1.0.1')
-        lib.push()
+        lib_dev = lib_repo.checkout('develop')
+        lib_dev.set_version('1.0.1')
+        lib_dev.push()
 
         app_repo = self._repos.create_repo('app')
-        app = app_repo.checkout('develop').set_version('1.0.1').set_requires('lib/1.x')
+        app = app_repo.checkout('develop')
+        app.set_version('1.0.1')
+        app.set_requires('lib/1.x')
         app.push()
 
         # Expect a rebuild of 'app' because a new artifact for 'lib' will be created
         self.assertEqual(1, len(artifactory.get_artifacts()['app']))
-        lib.push()
+        lib_dev.push()
         self.assertEqual(2, len(artifactory.get_artifacts()['app']))
 
     def test_push_app__before_lib_available__conan_install_should_fail(self):
@@ -100,6 +104,8 @@ class TestJenkins(unittest.TestCase):
         lib_repo.checkout('master').set_version('1.0.1')
 
         app_repo = self._repos.create_repo('app')
-        app = app_repo.checkout('master').set_version('1.0.1').set_requires('lib/1.x')
+        app = app_repo.checkout('master')
+        app.set_version('1.0.1')
+        app.set_requires('lib/1.x')
         # conan install should fail with exception
         self.assertRaises(Exception, lambda: app.push())

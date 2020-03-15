@@ -13,10 +13,12 @@ class TestConan(unittest.TestCase):
         self._repos = Repos()
 
     def _create_test_library(self):
-        return self._repos.create_repo('lib').checkout('master').set_requires('')
+        return self._repos.create_repo('lib').checkout('master')
 
     def _create_test_app(self):
-        return self._repos.create_repo('app').checkout('master').set_version('6.0.0')
+        app_master = self._repos.create_repo('app').checkout('master')
+        app_master.set_version('6.0.0')
+        return app_master
 
     def _create_conan(self, output = NullOutput()):
         return Conan(output)
@@ -124,7 +126,8 @@ conan_install_test_values = [
 
 @pytest.mark.parametrize("require_version, versions, expected_version", conan_install_test_values)
 def test_conan_install_parametrized(require_version, versions, expected_version):
-    app_branch = Repos().create_repo('lib').checkout('master').set_requires(require_version)
+    app_branch = Repos().create_repo('lib').checkout('master')
+    app_branch.set_requires(require_version)
     artifacts = {
         'lib': versions
     }
