@@ -85,4 +85,9 @@ class TestGitBranch(unittest.TestCase):
     def test_branch_description__expect_branch_name(self):
         branch2 = self._repo.checkout('branch1')
         self.assertTrue(branch2.get_description().find('branch1') >= 1)
-        
+    
+    def test_branch_checkout_change_colour(self):
+        branch = self._repo.checkout('branch', 'colour1')
+        self.assertEqual('colour1', branch.get_colour())
+        branch = self._repo.checkout('branch', 'colour2')
+        self.assertEqual('colour2', branch.get_colour())

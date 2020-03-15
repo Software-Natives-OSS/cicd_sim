@@ -25,18 +25,24 @@ class Repo:
     def get_name(self):
         return self._name
     
-    def checkout(self, branch_name, colour = 'black'):
+    def checkout(self, branch_name, colour = None):
         """
-        Checkout a branch. If the branch doesn't exist, it'll be created on the fly
+        Checkout a branch. If the branch doesn't exist, it'll be created on the fly.
         
         :branch_name: A Git branch name, e.g. "master", "develop", etc.
-        :colour: The library used to colorize is documented here: https://pypi.org/project/colored/
+        :colour: The colour for this branch. If set to 'None', a default colour 
+        will be applied if the branch is newly created. If the branch already 
+        exists, the existing colour will be kept. If a colour unequal to 'None' 
+        is set, the branch will end up with the specified colour. The library 
+        used to colorize is documented here: https://pypi.org/project/colored/
         """
         branch = self._find_branch(branch_name)
         if branch is None:
+            colour = colour if colour is not None else 'black'
             branch = Branch(branch_name, self)
-            branch.set_colour(colour)
             self._add_branch(branch)
+        if colour is not None:
+            branch.set_colour(colour)
         return branch
     
     def get_branches(self):
