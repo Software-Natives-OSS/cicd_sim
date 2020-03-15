@@ -92,8 +92,6 @@ class Jenkins:
             return "-rc.{}+{}".format(build_id, sha1)
         elif branch_name.startswith('release/'):
             return "-rc.{}+{}".format(build_id, sha1)
-        elif branch_name == "develop":
-            return "-{}+{}".format(build_id, sha1)
         else:
             return "-{}+{}".format(build_id, sha1)
 
