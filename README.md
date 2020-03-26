@@ -12,9 +12,9 @@ In continuous integration (CI), versioning plays an important role. This project
 - Artifact store (e.g. Artifactory)
 - Conan
 
-Within this environment, the user can safely and effortlessly test what happens if versions are use the one or the other way.
+Within this environment, the user can safely and effortlessly test what happens if project/packge artifacts are set to certain versions.
 
-This project is implemented in Python 3.
+This project is implemented in Python 3 and licensed under MIT.
 
 ## Introduction
 
