@@ -35,6 +35,7 @@ class Repo:
         exists, the existing colour will be kept. If a colour unequal to 'None' 
         is set, the branch will end up with the specified colour. The library 
         used to colorize is documented here: https://pypi.org/project/colored/
+        :return: The branch object
         """
         branch = self._find_branch(branch_name)
         if branch is None:
