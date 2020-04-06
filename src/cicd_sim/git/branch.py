@@ -21,6 +21,14 @@ class Branch:
         return self.get_description(True)
     
     def commit_file(self, file_name, content):
+        """
+        Commits a file specified by the file name and its content. If the file 
+        already exists, its content will be overwritten.
+
+        The changes will be committed, thereby, a new SHA will be generated.
+        
+        :return: Itself (the branch)
+        """
         self._files.set_file_content(file_name, content)
         self._commit()
         return self
@@ -42,9 +50,11 @@ class Branch:
     def set_files(self, files):
         self._files = files
         
-    def merge(self, foreign_branch):
+    def merge(self, foreign_branch, delete_after_merge = True):
         self._files = copy.deepcopy(foreign_branch._files)
         self._commit()
+        if delete_after_merge:
+            foreign_branch.delete()
         return self
 
     def push(self):
