@@ -91,3 +91,17 @@ class TestGitBranch(unittest.TestCase):
         self.assertEqual('colour1', branch.get_colour())
         branch = self._repo.checkout('branch', 'colour2')
         self.assertEqual('colour2', branch.get_colour())
+
+    def test_delete_on_merge_by_default(self):
+        master = self._repo.checkout('master')
+        develop = master.checkout('develop')
+        self.assertEqual(2, len(self._repo.get_branches()))
+        master.merge(develop)
+        self.assertEqual(1, len(self._repo.get_branches()))
+
+    def test_dont_delete_on_merge_on_request(self):
+        master = self._repo.checkout('master')
+        develop = master.checkout('develop')
+        self.assertEqual(2, len(self._repo.get_branches()))
+        master.merge(develop, delete_after_merge=False)
+        self.assertEqual(2, len(self._repo.get_branches()))

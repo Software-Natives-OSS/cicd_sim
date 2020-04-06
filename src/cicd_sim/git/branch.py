@@ -42,9 +42,11 @@ class Branch:
     def set_files(self, files):
         self._files = files
         
-    def merge(self, foreign_branch):
+    def merge(self, foreign_branch, delete_after_merge = True):
         self._files = copy.deepcopy(foreign_branch._files)
         self._commit()
+        if delete_after_merge:
+            foreign_branch.delete()
         return self
 
     def push(self):
