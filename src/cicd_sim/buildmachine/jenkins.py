@@ -1,10 +1,14 @@
 from .. util.stdoutput import StdOutput
-from .. util.build_id_generator import BuildIdGenerator
 from .. conan import Conan
-
+from . buildstrategy_a import BuildStrategyA
 
 class Jenkins:
-    """ A Jenkins simulation. It supports 'building a branch' which results in an artifact that gets published to an 'artifactory'
+    """ A Jenkins simulation. It supports 'building a branch' which results in an artifact.
+    Depending on the 'build strategy', that artifact get's a version and may be published
+    to an 'artifactory'
+
+    :config: Dict that may optionally specify the following keys: `conan`, `output` and 
+             `build_strategy`. For each key, defaults are used if they're not defined.
     """
     def __init__(self, artifactory, repos, config = {}):
         self._artifactory = artifactory
@@ -16,7 +20,7 @@ class Jenkins:
     def _setup(self, config):
         self._conan = config['conan'] if 'conan' in config else Conan()
         self._output = config['output'] if 'output' in config else StdOutput()
-        self._build_id_generator = config['build_id_generator'] if 'build_id_generator' in config else BuildIdGenerator()
+        self._build_strategy = config['build_strategy'] if 'build_strategy' in config else BuildStrategyA()
 
     def _register_build_hooks(self):
         self._repos.set_buildmachine(self)
@@ -36,10 +40,8 @@ class Jenkins:
         """
         self._output.building(branch)
         resolved_requires = self._conan.install(branch, self._artifactory.get_artifacts())
-        if self._shall_publish_artifact(branch):
-            version = branch.get_version()
-            suffix = self._get_version_suffix(branch)
-            artifact_version = "{}{}".format(version, suffix)
+        if self._build_strategy.shall_publish_artifact(branch):
+            artifact_version = self._build_strategy.generate_artifact_version(branch)
             self._publish_artifact(branch, artifact_version)
             self._remember_built_artifact(branch, resolved_requires)
             self.check_repos_require_build()
@@ -53,21 +55,6 @@ class Jenkins:
                 resolved_requires, _ = self._conan.resolve_requires(self._artifactory.get_artifacts(), branch)
                 if resolved_requires and self._is_artifact_rebuild_required(branch, resolved_requires):
                     self.build(branch)
-
-    def _shall_publish_artifact(self, branch):
-        branch_name = branch.get_name()
-        if branch_name == 'master':
-            return True
-        if branch_name == 'develop':
-            return True
-        if branch_name.startswith('release/'):
-            return True
-        if branch_name.startswith('support/'):
-            return True
-        if branch_name.startswith('hotfix/'):
-            return True
-        # e.g. 'feature/xyz'
-        return False
 
     def _remember_built_artifact(self, branch, resolved_requires):
         project_desc = branch.get_description(True)
@@ -83,20 +70,3 @@ class Jenkins:
         self._output.publish(branch.get_project_name(), descr, version)
         self._artifactory.publish(branch.get_project_name(), version)
     
-    def _get_version_suffix(self, branch):
-        build_id = self._get_build_id()
-        sha1 = branch.get_commit_sha()
-        branch_name = branch.get_name()
-        if branch_name == 'master':
-            return ""
-        elif branch_name.startswith('support/'):
-            return ""
-        elif branch_name.startswith('hotfix/'):
-            return "-rc.{}+{}".format(build_id, sha1)
-        elif branch_name.startswith('release/'):
-            return "-rc.{}+{}".format(build_id, sha1)
-        else:
-            return "-{}+{}".format(build_id, sha1)
-
-    def _get_build_id(self):
-        return self._build_id_generator.generate_id()

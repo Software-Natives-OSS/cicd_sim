@@ -7,6 +7,7 @@ from cicd_sim import Jenkins
 from cicd_sim import Artifactory
 from cicd_sim import Repos
 from cicd_sim import BuildIdGenerator
+from cicd_sim import BuildStrategyA
 
 class TestJenkins(unittest.TestCase):
 
@@ -16,7 +17,7 @@ class TestJenkins(unittest.TestCase):
         self._build_id_generator = BuildIdGenerator()
 
     def _create_jenkins(self, artifactory = Artifactory()):
-        return Jenkins(artifactory, self._repos, {'build_id_generator': self._build_id_generator})
+        return Jenkins(artifactory, self._repos, {'build_strategy': BuildStrategyA(self._build_id_generator)})
 
     def _create_jenkins_artifactory_mock(self):
         self._mock_artifactory = Artifactory()
