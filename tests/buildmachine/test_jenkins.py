@@ -16,7 +16,7 @@ class TestJenkins(unittest.TestCase):
         self._build_id_generator = BuildIdGenerator()
 
     def _create_jenkins(self, artifactory = Artifactory()):
-        return Jenkins(artifactory, self._repos, build_id_generator=self._build_id_generator)
+        return Jenkins(artifactory, self._repos, {'build_id_generator': self._build_id_generator})
 
     def _create_jenkins_artifactory_mock(self):
         self._mock_artifactory = Artifactory()

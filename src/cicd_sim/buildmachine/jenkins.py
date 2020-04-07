@@ -6,15 +6,18 @@ from .. conan import Conan
 class Jenkins:
     """ A Jenkins simulation. It supports 'building a branch' which results in an artifact that gets published to an 'artifactory'
     """
-    def __init__(self, artifactory, repos, conan=Conan(), output=StdOutput(), build_id_generator=BuildIdGenerator()):
+    def __init__(self, artifactory, repos, config = {}):
         self._artifactory = artifactory
-        self._conan = conan
         self._repos = repos
-        self._output = output
-        self._build_id_generator = build_id_generator
+        self._setup(config)        
         self._remember_built_branches = {}
         self._register_build_hooks()
     
+    def _setup(self, config):
+        self._conan = config['conan'] if 'conan' in config else Conan()
+        self._output = config['output'] if 'output' in config else StdOutput()
+        self._build_id_generator = config['build_id_generator'] if 'build_id_generator' in config else BuildIdGenerator()
+
     def _register_build_hooks(self):
         self._repos.set_buildmachine(self)
        
